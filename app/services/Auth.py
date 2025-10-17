@@ -4,14 +4,14 @@ from app.helpers.Utilities import Utils
 from pydantic import ValidationError
 from datetime import datetime, timedelta
 from fastapi import HTTPException, UploadFile
-from app.helpers.AzureStorage import AzureBlobUploader
+# from app.helpers.AzureStorage import AzureBlobUploader  # Disabled: Azure blob not in use
 import os 
 from bson import ObjectId
 class AuthService:
     
     def __init__(self):
         self.user_model = UserModel()
-        self.uploader = AzureBlobUploader()
+        # self.uploader = AzureBlobUploader()  # Disabled: Azure blob not in use
             
     async def get_user(self, email, password):
         """
@@ -127,9 +127,7 @@ class AuthService:
     
     def upload_profile_picture(self, file: UploadFile):
         try:
-            file_content = file.file.read()  
-            file_name = file.filename
-            return self.uploader.upload_profile_picture(file_content, file_name)
+            raise Exception("Azure Blob upload is disabled")
         except Exception as e:
             raise Exception(f"Error uploading profile picture: {str(e)}")
         

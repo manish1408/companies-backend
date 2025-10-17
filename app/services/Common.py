@@ -1,10 +1,10 @@
-from app.helpers.AzureStorage import AzureBlobUploader
+# from app.helpers.AzureStorage import AzureBlobUploader  # Disabled: Azure blob not in use
 import os
 
 
 class CommonService:
     def __init__(self):
-        self.azure_uploader = AzureBlobUploader()
+        # self.azure_uploader = AzureBlobUploader()  # Disabled: Azure blob not in use
         
     async def upload_file(self, file_path, folder_name="general-storage", file_type=".png"):
         """
@@ -19,16 +19,16 @@ class CommonService:
             dict: Success status and file URL or error message
         """
         try:
-            file_url = self.azure_uploader.upload_file_to_azure_blob(file_path, folder_name, file_type)       
             return {
-                "success": True,
-                "data": file_url
+                "success": False,
+                "data": None,
+                "error": "Azure Blob upload is disabled"
             }
         except Exception as e:
             return {
                 "success": False,
-                "data": str(e),
-                "error": 'Unable to upload file'
+                "data": None,
+                "error": str(e)
             }
     
     async def delete_file(self, file_url: str) -> dict:
@@ -42,16 +42,14 @@ class CommonService:
             dict: Success status and message or error
         """
         try:
-            # Call helper to delete the file from Azure Blob
-            self.azure_uploader.delete_file(file_url)
-
             return {
-                "success": True,
-                "data": f"File deleted successfully"
+                "success": False,
+                "data": None,
+                "error": "Azure Blob delete is disabled"
             }
         except Exception as e:
             return {
                 "success": False,
                 "data": None,
-                "error": f"Unable to delete file: {str(e)}"
+                "error": str(e)
             }

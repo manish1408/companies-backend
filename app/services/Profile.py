@@ -1,12 +1,12 @@
 from datetime import datetime
 from app.helpers.Utilities import Utils
-from app.helpers.AzureStorage import AzureBlobUploader
+# from app.helpers.AzureStorage import AzureBlobUploader  # Disabled: Azure blob not in use
 from bson import ObjectId
 from app.models.User import UserModel
 
 class ProfileService:
     def __init__(self):
-        self.azure_uploader = AzureBlobUploader()
+        # self.azure_uploader = AzureBlobUploader()  # Disabled: Azure blob not in use
         self.user_model=UserModel()
     
     async def change_profile_picture(self, user_id: str, file):
@@ -15,11 +15,8 @@ class ProfileService:
             if not ObjectId.is_valid(user_id):
                 return {"success": False, "data": None, "error": "Invalid ObjectId format."}
             existing_profile = await self.profile_model.get_profile(ObjectId(user_id))
-            if existing_profile and existing_profile.get("profilePic"):
-                self.azure_uploader.delete_file(existing_profile["profilePic"])
-            new_filename = self.azure_uploader.upload_profile_picture(file.file, file.filename)
-            await self.profile_model.update_profile(ObjectId(user_id), new_filename)       
-            return {"success": True, "data": f"Profile picture updated successfully with name {new_filename}"}
+            # Azure blob operations disabled
+            return {"success": False, "data": None, "error": "Profile picture upload is disabled"}
         except Exception as e:
             return {"success": False, "data": None, "error": str(e)}
         
