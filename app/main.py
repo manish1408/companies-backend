@@ -5,7 +5,7 @@ from starlette.responses import RedirectResponse
 from app.helpers.Database import MongoDB
 from app.middleware.Cors import add_cors_middleware
 from app.middleware.GlobalErrorHandling import GlobalErrorHandlingMiddleware
-from app.controllers import Auth, Profile
+from app.controllers import Auth, Profile, Company
 from app.middleware.JWTVerification import jwt_validator
 import logging
 
@@ -23,9 +23,10 @@ app = FastAPI(
 app.add_middleware(GlobalErrorHandlingMiddleware)
 add_cors_middleware(app)
 
-# Routes - Only User Management
+# Routes - User Management and Companies
 app.include_router(Auth.router)
 app.include_router(Profile.router, dependencies=[Depends(jwt_validator)])
+app.include_router(Company.router, dependencies=[Depends(jwt_validator)])
 
 @app.on_event("startup")
 async def startup_event():

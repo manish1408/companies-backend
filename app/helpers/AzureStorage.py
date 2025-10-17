@@ -86,24 +86,7 @@ class AzureBlobUploader:
             print(f"Failed to upload {file_path} to Azure Blob Storage. Error: {str(e)}")
             return None
         
-        
-    def clear_folder(self, operator_id: str, folder_name: str):
-        """
-        Delete all blobs under a folder for a specific operator.
-        operator_id: e.g., '12345'
-        folder_name: e.g., 'Airbnb/listingId'
-        """
-        full_prefix = f"{operator_id}/{folder_name}".rstrip("/") + "/"
-        blobs_to_delete = self.__container_client.list_blobs(name_starts_with=full_prefix)
-        
-        deleted_any = False
-        for blob in blobs_to_delete:
-            blob_client = self.__container_client.get_blob_client(blob)
-            blob_client.delete_blob()
-            deleted_any = True
-        print(f"Deleted  blobs from {full_prefix}")
 
-        return deleted_any  # True if something was deleted
 
     def upload_file_to_operator_folder(self, file_path: str, operator_id: str, folder_name: str = None, file_type=".png"):
         """
